@@ -7,12 +7,12 @@ var fs = require('fs');
 var SECRET_PATH = path.join(process.env.HOME, '.terces');
 var cachedSecret = null;
 
-function encode (payload, options) {
-	return jwt.encode(payload, getSecret(options));
+function encode (payload, options, secret) {
+	return jwt.encode(payload, secret || getSecret(options));
 }
 
-function decode (token, options) {
-	return jwt.decode(token, getSecret(options));
+function decode (token, options, secret) {
+	return jwt.decode(token, secret || getSecret(options));
 }
 
 function getSecret(options) {

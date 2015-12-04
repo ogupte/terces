@@ -7,18 +7,24 @@ var program = require('commander');
 
 program
 	.version('1.0.0')
-	.option('-s, --secret <secret>', 'secret key string')
+	.option('-k, --key <key>', 'secret key string')
 	.option('-S, --secret-path <path>', 'path to secret key file')
-	.option('-D, --dryrun', 'no writes to the filesystem');
+	.option('-D, --dryrun', 'no writes to the filesystem')
+	.option('-v, --verbose', 'log extra info to console');
 
 
 program
 	.command('decode <token>')
 	.alias('token')
 	.description('decode the given JWT token')
-	.action(function (token, options) {
-		console.log('doing a decode...');
-		console.log(terces.decode(token));
+	.action(function (token, command) {
+		if (command.parent.verbose) {
+			console.log('doing a decode...');
+		}
+
+		console.log(JSON.stringify(terces.decode(token, {
+			path: command.parent.secretPath
+		}, command.parent.key)));
 	})
 	.on('--help', function () {
 		console.log('Example:');
@@ -30,8 +36,11 @@ program
 	.command('encode <JSONData>')
 	.alias('payload')
 	.description('encode the given JSON payload string')
-	.action(function (jsonPayload, options) {
-		console.log('doing a encode...');
+	.action(function (jsonPayload, command) {
+		if (command.parent.verbose) {
+			console.log('doing a encode...');
+		}
+
 		var payload;
 		try {
 			payload = JSON.parse(jsonPayload);
@@ -39,7 +48,10 @@ program
 			console.log('Unable to parse JSON');
 			console.error(err.message);
 		}
-		console.log(JSON.stringify(terces.encode(payload), null, 2));
+
+		console.log(terces.encode(payload, {
+			path: command.parent.secretPath
+		}, command.parent.key));
 	})
 	.on('--help', function () {
 		console.log('Example:');
@@ -51,9 +63,15 @@ program
 	.command('set-secret <secret>')
 	.alias('secret')
 	.description('Set the secret value at ~/.terces')
-	.action(function (secret, options) {
-		console.log('Setting secret...');
-		terces.setSecret(secret);
+	.action(function (secret, command) {
+		if (command.parent.verbose) {
+			console.log('Setting secret...');
+		}
+
+		terces.setSecret(secret, {
+			path: command.parent.secretPath,
+			nowrite: command.parent.dryrun
+		});
 	})
 	.on('--help', function () {
 		console.log('Example:');
@@ -63,8 +81,8 @@ program
 
 program
 	.command('*')
-	.action(function (env) {
-		console.log('unknown command: ' + env);
+	.action(function (commandName, command) {
+		console.log('unknown command: ' + commandName);
 	});
 
 program.parse(process.argv);
