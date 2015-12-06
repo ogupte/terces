@@ -1,6 +1,6 @@
 {
   "name": "terces",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A library and command-line tool to encode and decode JWT tokens using a key in the local filesystem",
   "main": "index.js",
   "scripts": {
