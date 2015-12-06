@@ -57,6 +57,7 @@ this command will output a JWT token encoded with your terces key. This token ca
 packaged with your application build or set on an ENV variable and then decoded during
 run time, where the sensitive, decoded JSON data can be stored in memory.
 
+### terces Library
 In you application code import the terces module to decode the token.
 ```javascript
 var terces = require('terces');
