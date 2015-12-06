@@ -1,6 +1,6 @@
 {
   "name": "terces",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library and command-line tool to encode and decode JWT tokens using a key in the local filesystem",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "/home/oagupte/gitprojects/terces.git"
+    "url": "git@github.com:ogupte/terces.git"
   },
   "author": "Oliver Gupte",
   "license": "ISC",
