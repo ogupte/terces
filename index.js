@@ -4,55 +4,55 @@ var jwt = require('jwt-simple');
 var path = require('path');
 var fs = require('fs');
 
-var SECRET_PATH = path.join(process.env.HOME, '.terces');
-var cachedSecret = null;
+var KEY_PATH = path.join(process.env.HOME, '.terces');
+var cachedKey = null;
 
-function encode (payload, options, secret) {
-	return jwt.encode(payload, secret || getSecret(options));
+function encode (payload, options, key) {
+	return jwt.encode(payload, key || getKey(options));
 }
 
-function decode (token, options, secret) {
-	return jwt.decode(token, secret || getSecret(options));
+function decode (token, options, key) {
+	return jwt.decode(token, key || getKey(options));
 }
 
-function getSecret(options) {
+function getKey(options) {
 	options = options || {};
-	options.path = options.path || SECRET_PATH;
+	options.path = options.path || KEY_PATH;
 	options.forceRead = options.forceRead || false;
 	options.nocache = options.nocache || false;
 
-	var secret = cachedSecret;
+	var key = cachedKey;
 
-	if (options.forceRead || secret === null) {
-		secret = fs.readFileSync(options.path).toString('utf8');
+	if (options.forceRead || key === null) {
+		key = fs.readFileSync(options.path).toString('utf8');
 	}
 
 	if (!options.nocache) {
-		cachedSecret = secret;
+		cachedKey = key;
 	}
 
-	return secret;
+	return key;
 }
 
-function setSecret(newsecret, options) {
+function setKey(newkey, options) {
 	options = options || {};
-	options.path = options.path || SECRET_PATH;
+	options.path = options.path || KEY_PATH;
 	options.nowrite = options.nowrite || false;
 	options.nocache = options.nocache || false;
-	options.secretFileMode = options.secretFileMode || 0o640;
+	options.keyFileMode = options.keyFileMode || 0o640;
 
 	if (!options.nocache) {
-		cachedSecret = newsecret;
+		cachedKey = newkey;
 	}
 
 	if (!options.nowrite) {
-		fs.writeFileSync(options.path, newsecret, { encoding: 'utf8', mode: options.secretFileMode });
+		fs.writeFileSync(options.path, newkey, { encoding: 'utf8', mode: options.keyFileMode });
 	}
 }
 
 module.exports = {
 	encode: encode,
 	decode: decode,
-	setSecret: setSecret,
-	getSecret: getSecret
+	setKey: setKey,
+	getKey: getKey
 };

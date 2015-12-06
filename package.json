@@ -1,7 +1,7 @@
 {
   "name": "terces",
   "version": "1.0.0",
-  "description": "A library and command-line tool to encode and decode JWT tokens using a secret stored on the host filesystem",
+  "description": "A library and command-line tool to encode and decode JWT tokens using a key in the local filesystem",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "/home/oagupte/gitprojects/terces.git"
   },
-  "author": "",
+  "author": "Oliver Gupte",
   "license": "ISC",
   "dependencies": {
     "commander": "^2.9.0",
